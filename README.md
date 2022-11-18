@@ -12,7 +12,16 @@ My personal rest API.
 - token authentication;
 - personal budget control;
 
-### Database configuration
+## How to use
+
+Clone this repo:
+```bash
+$ git clone git@github.com:ambrisolla/brisa-api.git
+cd brisa-api
+docker-compose -d up
+```
+
+## Database configuration
 
 ```sql
 CREATE TABLE `budget` (
@@ -46,3 +55,4 @@ CREATE TABLE `user_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ```
+
