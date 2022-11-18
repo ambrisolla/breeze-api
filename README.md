@@ -19,7 +19,7 @@ Clone this repo:
 ```bash
 $ git clone git@github.com:ambrisolla/brisa-api.git
 $ cd brisa-api
-$docker-compose -d up
+$ docker-compose up -d
 ```
 
 ## Database configuration
