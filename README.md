@@ -15,10 +15,11 @@ My personal rest API.
 ## How to use
 
 Clone this repo:
+
 ```bash
 $ git clone git@github.com:ambrisolla/brisa-api.git
-cd brisa-api
-docker-compose -d up
+$ cd brisa-api
+$docker-compose -d up
 ```
 
 ## Database configuration
