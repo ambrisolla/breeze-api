@@ -11,7 +11,9 @@ class MySQL:
       user     = os.environ['MYSQL_USERNAME'],
       password = os.environ['MYSQL_PASSWORD'],
       host     = os.environ['MYSQL_HOSTNAME'],
-      database = os.environ['MYSQL_DATABASE']
+      database = os.environ['MYSQL_DATABASE'],
+      use_unicode=True,
+      charset='ascii'
     )
     self.conn.autocommit = True
 
@@ -31,9 +33,8 @@ class MySQL:
       }
     except Exception as err:
       return {
-        'message' : str(err),
-        'status'  : 500
-      }
+        'message' : str(err)
+      }, 500
     
   def parse_query_result(self, data):
     try:

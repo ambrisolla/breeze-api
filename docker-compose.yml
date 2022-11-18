@@ -1,0 +1,26 @@
+#version: '3.4'
+services:
+  api:
+    image: alpine:latest
+    container_name: breeze-api
+    ports:
+      - 5000:5000
+    command: |
+      sh -c "
+        apk update ;
+        apk add python3 py3-pip ;
+        apk add build-base openldap-dev python3-dev ;
+        pip install flask python-ldap mysql-connector-python pyyaml ldap3 ;
+        cd /app ;
+        python3 main.py"
+    volumes:
+      - .:/app
+  ldap:
+    image: osixia/openldap:1.5.0
+    container_name: breeze-ldap
+    #ports:
+    #  - 389:389
+    environment:
+      LDAP_ORGANISATION: Brisa
+      LDAP_DOMAIN: brisa.io
+      LDAP_ADMIN_PASSWORD: ldappassword

@@ -40,6 +40,7 @@ class LdapAuth:
     try:     
       pl = Payload()
       data = pl.get()
+      
       username = data['username']
       password = data['password']
       server_uri = f"ldap://{self.ldap_host}:389"
@@ -58,8 +59,10 @@ class LdapAuth:
           'message' : 'Access granted!',
           'token' : token['token']
         }
-      else: 
-        return Response('{"message":"Access denied!"}', status=403, content_type='application/json')
+      else:
+        return {
+          'message' : 'Access denied!'
+        }, 500
     except LDAPBindError as e:
         return {
           'message' : str(e)
@@ -70,6 +73,7 @@ class LdapAuth:
       db = MySQL()
       query_user_token = db.query(f'select * from user_token where uid="{uid}"')
       token            = query_user_token['data']['result']
+      
       if len(token) == 0:
         valid_token  = False
         exists_token = False
@@ -100,7 +104,7 @@ class LdapAuth:
       return query_get_token_parsed[0]
     except Exception as err:
       return {
-        'message' : str(err)
+        'messages' : str(err)
       }, 500
 
   def passport(self):
