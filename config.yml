@@ -1,0 +1,11 @@
+mysql:
+  MYSQL_DATABASE: breeze
+  MYSQL_HOSTNAME: localhost
+  MYSQL_PORT: 3306
+  MYSQL_USERNAME: root
+  MYSQL_PASSWORD: senha3
+ldap:
+  LDAP_HOST: 192.168.0.111
+  LDAP_BIND_DN: dc=brisa,dc=io
+  LDAP_BIND_PASSWORD: passwd
+  LDAP_BIND_USERNAME: admin
