@@ -40,7 +40,10 @@ class LdapAuth:
     try:     
       pl = Payload()
       data = pl.get()
-      
+      if 'username' not in data or 'password' not in data:
+        return {
+          'message' : 'Access denied!'
+        }, 403
       username = data['username']
       password = data['password']
       server_uri = f"ldap://{self.ldap_host}:389"

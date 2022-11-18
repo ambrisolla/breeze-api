@@ -12,7 +12,7 @@ class AccessControl:
     self.token   = Payload().token()
     self.payload   = Payload().get()
 
-  def get_users(self, **kwargs):
+  def get_users(self):
     try:
       ldap_auth = LdapAuth()
       ldap_conn = ldap_auth.connect_ldap_server()
@@ -20,6 +20,7 @@ class AccessControl:
         search_filter = '(uid=*)',
         search_scope  = SUBTREE, 
         attributes    = "*")
+      
       users = []
       for entry in ldap_conn.entries:
         users.append({
@@ -169,6 +170,7 @@ class AccessControl:
       query_get_uid = db.query(f'select uid from user_token where token="{self.token}"')
       parse_query_get_uid = db.parse_query_result(query_get_uid)
       uid = parse_query_get_uid[0]['uid']
+      return self.get_users()
       user = [ x for x  in self.get_users() if x['uid'] == uid ]
       return user
     except Exception as e:

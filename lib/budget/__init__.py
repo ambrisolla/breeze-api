@@ -99,6 +99,7 @@ class Budget:
 
 		def get(self):
 			try:
+				
 				token      = Budget().token
 				ac         = AccessControl()				
 				user_info = ac.get_user_info_by_token()
@@ -114,7 +115,6 @@ class Budget:
 		
 		def add(self):
 			try:
-				token      = Budget().token
 				args			 = self.payload
 				name       = args['name']
 				type       = args['type']
