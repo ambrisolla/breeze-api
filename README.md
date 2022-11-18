@@ -18,6 +18,11 @@ Clone this repo:
 
 ```bash
 $ git clone git@github.com:ambrisolla/brisa-api.git
+```
+
+Execute the commands bellow:
+
+```bash
 $ cd brisa-api
 $ docker-compose up -d
 ```
