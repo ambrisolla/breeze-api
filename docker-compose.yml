@@ -6,6 +6,8 @@ services:
     ports:
       - 80:80
       - 443:443
+    volumes:
+      - /certs:/certs
   api:
     image: alpine:latest
     container_name: breeze-api
