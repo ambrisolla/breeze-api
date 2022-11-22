@@ -6,6 +6,7 @@ import os
 import hashlib
 from datetime import datetime
 from lib.system.payload import Payload
+from lib.users import AccessControl
 
 class LdapAuth:
   def __init__(self):
@@ -71,6 +72,30 @@ class LdapAuth:
           'message' : str(e)
         }, 500
   
+  def login_info(self):
+    try:
+      token = self.token
+      db = MySQL()
+      query_user_by_token = db.query(f'select uid,token_birth from user_token where token="{token}"')
+      parse_query_user_by_token = db.parse_query_result(query_user_by_token)
+      # if admin
+      if parse_query_user_by_token[0]['uid'] == 'admin':
+        res = parse_query_user_by_token[0]
+        res['name'] = 'admin'
+        res['is_admin'] = True
+        return res
+      else:
+        ac = AccessControl()
+        user = ac.get_user_info_by_token()
+        res = user[0]
+        res['token_birth'] = parse_query_user_by_token[0]['token_birth']
+        res['is_admin'] = user[0]['user_type'] == 'admin'
+        return res
+    except Exception as err:
+      return {
+        'message' : str(err)
+      }, 500
+    
   def generate_token(self, uid):
     try:
       db = MySQL()

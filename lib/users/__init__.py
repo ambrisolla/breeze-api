@@ -1,6 +1,5 @@
 from ldap3 import Server, Connection, ALL, SUBTREE, MODIFY_REPLACE
 from ldap3.core.exceptions import LDAPException, LDAPBindError
-from lib.auth import LdapAuth
 from lib.system.database import MySQL
 from lib.system.payload	 import Payload
 
@@ -13,6 +12,7 @@ class AccessControl:
     self.payload   = Payload().get()
 
   def get_users(self):
+    from lib.auth import LdapAuth
     try:
       ldap_auth = LdapAuth()
       ldap_conn = ldap_auth.connect_ldap_server()
@@ -40,6 +40,7 @@ class AccessControl:
   '''
   def delete(self):
     try:
+      from lib.auth import LdapAuth
       ldap_auth = LdapAuth()
       ldap_conn = ldap_auth.connect_ldap_server()
       db = MySQL()
@@ -59,7 +60,7 @@ class AccessControl:
   '''
   def add(self):
     try:     
-      
+      from lib.auth import LdapAuth
       if 'uid' not in self.payload or 'cn' not in self.payload or 'description' not in self.payload or 'is_admin' not in self.payload or 'user_password' not in self.payload:
         return {
           'status' : False,
@@ -108,6 +109,7 @@ class AccessControl:
 
   def change(self):
     try:            
+      from lib.auth import LdapAuth
       if 'uid' not in self.payload or 'cn' not in self.payload or 'description' not in self.payload or 'is_admin' not in self.payload or 'user_password' not in self.payload:
         return {
           'status' : False,
@@ -170,7 +172,7 @@ class AccessControl:
       query_get_uid = db.query(f'select uid from user_token where token="{self.token}"')
       parse_query_get_uid = db.parse_query_result(query_get_uid)
       uid = parse_query_get_uid[0]['uid']
-      return self.get_users()
+      #return self.get_users()
       user = [ x for x  in self.get_users() if x['uid'] == uid ]
       return user
     except Exception as e:

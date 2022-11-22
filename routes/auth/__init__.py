@@ -34,3 +34,14 @@ def auth_login():
 		return {
 				'message' : str(err)
 		}, 500
+
+@app.route('/api/v1/auth/login/info', methods=['GET'])
+def auth_login_info():
+	try:
+		auth = LdapAuth()
+		login_info = auth.login_info()
+		return login_info
+	except Exception as err:
+		return {
+				'message' : str(err)
+		}, 500

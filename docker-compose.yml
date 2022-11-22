@@ -2,6 +2,7 @@ services:
   api:
     image: alpine:latest
     container_name: breeze-api
+    restart: always
     ports:
       - 5000:5000
     command: |
@@ -9,7 +10,7 @@ services:
         apk update ;
         apk add python3 py3-pip ;
         apk add build-base openldap-dev python3-dev ;
-        pip install flask python-ldap mysql-connector-python pyyaml ldap3 ;
+        pip install flask python-ldap mysql-connector-python pyyaml ldap3 flask-cors ;
         cd /app ;
         python3 main.py"
     volumes:
