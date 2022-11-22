@@ -172,7 +172,6 @@ class AccessControl:
       query_get_uid = db.query(f'select uid from user_token where token="{self.token}"')
       parse_query_get_uid = db.parse_query_result(query_get_uid)
       uid = parse_query_get_uid[0]['uid']
-      #return self.get_users()
       user = [ x for x  in self.get_users() if x['uid'] == uid ]
       return user
     except Exception as e:

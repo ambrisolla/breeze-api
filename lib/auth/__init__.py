@@ -66,7 +66,7 @@ class LdapAuth:
       else:
         return {
           'message' : 'Access denied!'
-        }, 500
+        }, 403
     except LDAPBindError as e:
         return {
           'message' : str(e)
