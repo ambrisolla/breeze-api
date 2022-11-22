@@ -1,4 +1,11 @@
 services:
+  nginx:
+    image: nginx:latest
+    container_name: breeze-nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
   api:
     image: alpine:latest
     container_name: breeze-api

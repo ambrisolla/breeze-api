@@ -152,6 +152,4 @@ class LdapAuth:
       return {  
           'message' : str(err)
         }, 500
-
-######################################3 criar outra classe para as acoes abaixo
   
