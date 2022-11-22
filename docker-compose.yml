@@ -8,6 +8,7 @@ services:
       - 443:443
     volumes:
       - /certs:/certs
+      - ./files/brisa.io.conf:/etc/nginx/conf.d/brisa.io.conf
   api:
     image: alpine:latest
     container_name: breeze-api
