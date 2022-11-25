@@ -2,6 +2,7 @@ from ldap3 import Server, Connection, ALL, SUBTREE, MODIFY_REPLACE
 from ldap3.core.exceptions import LDAPException, LDAPBindError
 from lib.system.database import MySQL
 from lib.system.payload	 import Payload
+import hashlib
 
 class AccessControl:
   ''' 
@@ -12,6 +13,10 @@ class AccessControl:
     self.payload   = Payload().get()
 
   def get_users(self):
+    # teste
+    import time
+    #time.sleep(1)
+    # fim teste
     from lib.auth import LdapAuth
     try:
       ldap_auth = LdapAuth()
@@ -23,11 +28,16 @@ class AccessControl:
       
       users = []
       for entry in ldap_conn.entries:
+        # create a md5 hash from uid/email to create gravatar url link
+        
+        uid           = str(getattr(entry,'uid'))
+        gravatar_hash = hashlib.md5(uid.encode()).hexdigest()
         users.append({
-          'cn'          : str(getattr(entry,'cn')),
-          'uid'         : str(getattr(entry,'uid')),
-          'user_type'   : str(getattr(entry,'title')),
-          'description' : str(getattr(entry,'description'))
+          'cn'            : str(getattr(entry,'cn')),
+          'uid'           : str(getattr(entry,'uid')),
+          'user_type'     : str(getattr(entry,'title')),
+          'description'   : str(getattr(entry,'description')),
+          'gravatar_hash' : gravatar_hash
         })        
       return users
     except Exception as e:
@@ -64,8 +74,8 @@ class AccessControl:
       if 'uid' not in self.payload or 'cn' not in self.payload or 'description' not in self.payload or 'is_admin' not in self.payload or 'user_password' not in self.payload:
         return {
           'status' : False,
-          'message' : 'Missed parameters'
-        }, 500
+          'message' : 'Missing parameters!'
+        }, 400
       else:
         # check if users exists
         users = [ x['uid'] for x in self.get_users() ]
@@ -113,7 +123,7 @@ class AccessControl:
       if 'uid' not in self.payload or 'cn' not in self.payload or 'description' not in self.payload or 'is_admin' not in self.payload or 'user_password' not in self.payload:
         return {
           'status' : False,
-          'message' : 'Missed parameters'
+          'message' : 'Missing parameters!'
         }, 500
       else:
         users = [ x['uid'] for x in self.get_users() ]
@@ -142,7 +152,7 @@ class AccessControl:
           if self.payload['user_password'] == '__NOT_CHANGED__':
             response = ldap_conn.modify(user_dn,{
                 'description' : [(MODIFY_REPLACE,[self.payload['description']])],
-                'cn'          : [(MODIFY_REPLACE,[self.payload['cn']])],                  
+                'cn'          : [(MODIFY_REPLACE,[self.payload['cn']])],
                 'title'       : [(MODIFY_REPLACE,[title])] })
           else:
             response = ldap_conn.modify(user_dn,{
