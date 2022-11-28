@@ -15,6 +15,13 @@ def budget_category_add():
   res = budget_category.add()
   return res
 
+@app.route('/api/v1/budget/category/delete', methods=['POST'])
+def budget_category_delete():
+  budget_category = Budget().Category()
+  res = budget_category.delete()
+  return res
+
+
 @app.route('/api/v1/budget', methods=['GET'])
 def budget():
   budget = Budget()
@@ -26,3 +33,4 @@ def budget_add():
   budget = Budget()
   res = budget.add()
   return res
+

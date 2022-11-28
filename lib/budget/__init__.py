@@ -98,14 +98,13 @@ class Budget:
 			self.payload = Payload().get()
 
 		def get(self):
-			try:
-				
+			try:	
 				token      = Budget().token
 				ac         = AccessControl()				
 				user_info = ac.get_user_info_by_token()
 				uid       = user_info[0]['uid']
 				db = MySQL()
-				query_get_category = db.query(f'select * from budget_category where uid="{uid}"')
+				query_get_category = db.query(f'select _type,color,name,id from budget_category where uid="{uid}"')
 				parse_query_get_category = db.parse_query_result(query_get_category)
 				return parse_query_get_category
 			except Exception as err:
@@ -138,5 +137,28 @@ class Budget:
 				return {
 					'message' : str(err)
 				}, 500
+			
+		def delete(self):
+			try:
+				ac         = AccessControl()				
+				user_info = ac.get_user_info_by_token()
+				uid       = user_info[0]['uid']
+				category_id = self.payload[0]
+				db = MySQL()
+				res = db.query(f'delete from budget_category where uid="{uid}" and id={category_id}')
+				if 'data' not in res:
+					return {
+						'message' : str(res[0])
+					}
+				else:
+					return {
+						'message' : 'Category removed successfully!'
+					}
+
+			except Exception as err:
+				return {
+					'message' : str(err)
+				}, 500
+			
 
 	

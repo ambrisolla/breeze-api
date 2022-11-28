@@ -25,7 +25,6 @@ class MySQL:
       columns = cursor.column_names
       cursor.close()
       return {
-        'status' : 200,
         'data'   : {
           'columns' : columns,
           'result'  : result
