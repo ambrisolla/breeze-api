@@ -13,7 +13,10 @@ class MySQL:
       host     = os.environ['MYSQL_HOSTNAME'],
       database = os.environ['MYSQL_DATABASE'],
       use_unicode=True,
-      charset='ascii's
+      charset='ascii'
+    )
+    self.conn.autocommit = True
+
   def query(self, query):
     try:
       cursor  = self.conn.cursor()
