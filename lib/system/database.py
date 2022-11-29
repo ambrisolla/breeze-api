@@ -13,10 +13,7 @@ class MySQL:
       host     = os.environ['MYSQL_HOSTNAME'],
       database = os.environ['MYSQL_DATABASE'],
       use_unicode=True,
-      charset='ascii'
-    )
-    self.conn.autocommit = True
-
+      charset='ascii's
   def query(self, query):
     try:
       cursor  = self.conn.cursor()
@@ -25,6 +22,7 @@ class MySQL:
       columns = cursor.column_names
       cursor.close()
       return {
+        'status' : 200,
         'data'   : {
           'columns' : columns,
           'result'  : result
@@ -32,6 +30,7 @@ class MySQL:
       }
     except Exception as err:
       return {
+        'status' : 500,
         'message' : str(err)
       }, 500
     
