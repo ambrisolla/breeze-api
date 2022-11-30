@@ -74,12 +74,13 @@ class Budget:
 			query_get 			 = db.query(f'select * from budget where uid="{uid}" order by datetime desc {query_datetime_range} limit {limit}')
 			parse_query_get  = db.parse_query_result(query_get)
 			total_items = query_count['data']['result'][0][0]
+			
 			if len(parse_query_get) > 0:
 				pages = total_items / len(parse_query_get)
 			else: 
 				return {
-					'message' : 'Out of range!'
-				}, 400
+					'data' : []
+				}
 			
 			# this is necessary to transform amount column type to float
 			parsed = []
@@ -152,15 +153,23 @@ class Budget:
 				uid       = user_info[0]['uid']
 				category_id = self.payload[0]
 				db = MySQL()
-				res = db.query(f'delete from budget_category where uid="{uid}" and id={category_id}')
-				if 'data' not in res:
+				# check if exists budgets with this category
+				get_budget = db.query(f'select count(*) as count from budget where category={category_id}')
+				parsed_get_budget = db.parse_query_result(get_budget)
+				if parsed_get_budget[0]['count'] == 0:
+					res = db.query(f'delete from budget_category where uid="{uid}" and id={category_id}')
+					if 'data' not in res:
+						return {
+							'message' : str(res[0])
+						}
+					else:
+						return {
+							'message' : 'Category removed successfully!'
+						}
+				elif parsed_get_budget[0]['count'] > 0:
 					return {
-						'message' : str(res[0])
-					}
-				else:
-					return {
-						'message' : 'Category removed successfully!'
-					}
+						'message' : 'This category is associated with one or more income!'
+					}, 400
 
 			except Exception as err:
 				return {
