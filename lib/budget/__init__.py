@@ -71,7 +71,7 @@ class Budget:
 
 			# query
 			query_count 		 = db.query(f'select count(*) from budget where uid="{uid}" {query_datetime_range}')			
-			query_get 			 = db.query(f'select * from budget where uid="{uid}" {query_datetime_range} limit {limit}')
+			query_get 			 = db.query(f'select * from budget where uid="{uid}" order by datetime desc {query_datetime_range} limit {limit}')
 			parse_query_get  = db.parse_query_result(query_get)
 			total_items = query_count['data']['result'][0][0]
 			if len(parse_query_get) > 0:
@@ -81,11 +81,18 @@ class Budget:
 					'message' : 'Out of range!'
 				}, 400
 			
+			# this is necessary to transform amount column type to float
+			parsed = []
+			for item in parse_query_get:
+				new_item = item
+				new_item['amount'] = float(item['amount'])
+				parsed.append(new_item)
+
 			return {
 				'total_items' : total_items,
 				'pages' : int(abs(pages)),
-				'data'  : parse_query_get,
-				'page'  : page,
+				'data'  : parsed,
+				'page'  : page
 			}
 		except Exception as err:
 			return {
