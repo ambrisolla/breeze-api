@@ -103,7 +103,6 @@ class Budget:
 
 	def delete(self):
 		try:
-			token      = Budget().token
 			ac         = AccessControl()				
 			user_info = ac.get_user_info_by_token()
 			uid       = user_info[0]['uid']
