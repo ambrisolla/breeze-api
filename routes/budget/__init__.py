@@ -34,3 +34,9 @@ def budget_add():
   res = budget.add()
   return res
 
+@app.route('/api/v1/budget/delete', methods=['POST'])
+def budget_delete():
+  budget = Budget()
+  res = budget.delete()
+  return res
+

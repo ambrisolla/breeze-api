@@ -100,6 +100,31 @@ class Budget:
 				'message' : str(err)
 			}, 500
 
+
+	def delete(self):
+		try:
+			token      = Budget().token
+			ac         = AccessControl()				
+			user_info = ac.get_user_info_by_token()
+			uid       = user_info[0]['uid']
+			ids = ','.join(map(str,self.payload))
+			db = MySQL()
+			res = db.query(f'delete from budget where id in ({ids}) and uid="{uid}"')
+			if res['status'] == 200:
+				return {
+					'message' : 'Income deleted!'
+				}
+			else:
+				return {
+					'message' : 'Error to remove income!'
+				}, 500
+		
+		except Exception as err:
+			return {
+				'message' : str(err)
+			}, 500
+
+
 	class Category():
 		
 		def __init__(self):
