@@ -53,8 +53,10 @@ class Budget:
 			page 							   = 0    # default page number
 			if 'from' in args and 'to' in args:
 				_from = args['from']
-				_to = args['to']
+				_to   = args['to']
 				query_datetime_range = f'and datetime >= "{_from}" and datetime <= "{_to}"'
+				if _from == None or _to == None or _to == '' or _from == '':
+					query_datetime_range = ''
 			# limit
 			if 'limit' in args:
 				limit = int(args['limit'])
@@ -72,7 +74,7 @@ class Budget:
 			_type = args['type']
 			# query
 			query_count 		 = db.query(f'select count(*) from budget where _type="{_type}" and uid="{uid}" {query_datetime_range}')			
-			query_get 			 = db.query(f'select * from budget where _type="{_type}" and uid="{uid}" order by datetime desc {query_datetime_range} limit {limit}')
+			query_get 			 = db.query(f'select * from budget where _type="{_type}" and uid="{uid}" {query_datetime_range} order by datetime desc  limit {limit}')
 			parse_query_get  = db.parse_query_result(query_get)
 			total_items = query_count['data']['result'][0][0]
 			
