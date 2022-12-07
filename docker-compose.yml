@@ -29,6 +29,9 @@ services:
     image: osixia/openldap:1.5.0
     container_name: breeze-ldap
     restart: always
+    ports:
+      - 389:389
+      - 636:636
     environment:
       LDAP_ORGANISATION: Brisa
       LDAP_DOMAIN: brisa.io

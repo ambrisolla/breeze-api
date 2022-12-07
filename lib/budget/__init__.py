@@ -68,10 +68,11 @@ class Budget:
 				else:
 					limit_start = page * limit
 					limit = f'{limit_start},{limit}'
-
+			# set type
+			_type = args['type']
 			# query
-			query_count 		 = db.query(f'select count(*) from budget where uid="{uid}" {query_datetime_range}')			
-			query_get 			 = db.query(f'select * from budget where uid="{uid}" order by datetime desc {query_datetime_range} limit {limit}')
+			query_count 		 = db.query(f'select count(*) from budget where _type="{_type}" and uid="{uid}" {query_datetime_range}')			
+			query_get 			 = db.query(f'select * from budget where _type="{_type}" and uid="{uid}" order by datetime desc {query_datetime_range} limit {limit}')
 			parse_query_get  = db.parse_query_result(query_get)
 			total_items = query_count['data']['result'][0][0]
 			
@@ -99,7 +100,6 @@ class Budget:
 			return {
 				'message' : str(err)
 			}, 500
-
 
 	def delete(self):
 		try:
@@ -133,10 +133,11 @@ class Budget:
 			try:	
 				token      = Budget().token
 				ac         = AccessControl()				
-				user_info = ac.get_user_info_by_token()
-				uid       = user_info[0]['uid']
+				user_info  = ac.get_user_info_by_token()
+				uid        = user_info[0]['uid']
+				_type      = self.payload['type']
 				db = MySQL()
-				query_get_category = db.query(f'select _type,color,name,id from budget_category where uid="{uid}"')
+				query_get_category = db.query(f'select _type,color,name,id from budget_category where _type="{_type}" and uid="{uid}"')
 				parse_query_get_category = db.parse_query_result(query_get_category)
 				return parse_query_get_category
 			except Exception as err:
