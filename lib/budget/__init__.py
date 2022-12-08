@@ -72,9 +72,13 @@ class Budget:
 					limit = f'{limit_start},{limit}'
 			# set type
 			_type = args['type']
+			if _type != 'in' and _type != 'out':	
+				query_type = f'_type REGEXP "in|out"'
+			else:
+				query_type = f'_type="{_type}"'	
 			# query
-			query_count 		 = db.query(f'select count(*) from budget where _type="{_type}" and uid="{uid}" {query_datetime_range}')			
-			query_get 			 = db.query(f'select * from budget where _type="{_type}" and uid="{uid}" {query_datetime_range} order by datetime desc  limit {limit}')
+			query_count 		 = db.query(f'select count(*) from budget where {query_type} and uid="{uid}" {query_datetime_range}')			
+			query_get 			 = db.query(f'select * from budget where {query_type} and uid="{uid}" {query_datetime_range} order by datetime desc  limit {limit}')
 			parse_query_get  = db.parse_query_result(query_get)
 			total_items = query_count['data']['result'][0][0]
 			
